@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:animate_do/animate_do.dart';
 
 import 'package:music_player/src/helpers/helpers.dart';
+import 'package:music_player/src/models/audio_player_model.dart';
 import 'package:music_player/src/widgets/custom_appbar.dart';
+import 'package:provider/provider.dart';
 
 class MusicPlayerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
+    return ChangeNotifierProvider(
+      create: (_) => new AudioPlayerModel(),
 
-          Background(),
+      child: Scaffold(
+        body: Stack(
+          children: [
 
-          Column(
-            children: [
-              CustomAppbar(),
+            Background(),
 
-              ImagenDiscoDuracion(),
+            Column(
+              children: [
+                CustomAppbar(),
 
-              TituloPlay(),
+                ImagenDiscoDuracion(),
 
-              SizedBox( height: 5.0 ),
-              Expanded(
-                child: Lyrics(),
-              ),
-              SizedBox( height: 5.0 )
-            ],
-          ),
-        ],
-      )
+                TituloPlay(),
+
+                SizedBox( height: 5.0 ),
+                Expanded(
+                  child: Lyrics(),
+                ),
+                SizedBox( height: 5.0 )
+              ],
+            ),
+          ],
+        )
+      ),
     );
   }
 }
@@ -140,12 +146,17 @@ class _TituloPlayState extends State<TituloPlay> with SingleTickerProviderStateM
             ),
 
             onPressed: (){
+
+              final audioPlayerProvider = Provider.of<AudioPlayerModel>(context, listen: false);
+
               if ( this.isPlaying ){
                 this.playAnimation.reverse();
                 this.isPlaying = false;
+                audioPlayerProvider.controller.stop();
               } else {
                 this.playAnimation.forward();
                 this.isPlaying = true;
+                audioPlayerProvider.controller.repeat() ;
               }
             },
           ),
@@ -237,6 +248,7 @@ class _ImagenDisco extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final screenSize = MediaQuery.of(context).size;
+    final audioPlayerProvider = Provider.of<AudioPlayerModel>(context);
 
     return Container(
       padding: EdgeInsets.all(15),
@@ -249,7 +261,14 @@ class _ImagenDisco extends StatelessWidget {
           alignment: Alignment.center,    // Para centrar los hijos del stack
 
           children: [
-            Image(image: AssetImage('assets/aurora.jpg')),
+            SpinPerfect(
+              duration: Duration( seconds: 10 ),
+              infinite: true,
+              manualTrigger: true,
+              controller: ( animationController ) => audioPlayerProvider.controller = animationController,    // Para manejar el
+                                                                                                              // la animacion
+              child: Image(image: AssetImage('assets/aurora.jpg'))
+            ),
 
             Container(
               width: (screenSize.width * 0.55) * 0.14,
