@@ -19,7 +19,6 @@ class AudioPlayerModel with ChangeNotifier{
 
   set controller(AnimationController controller) {
     this._controller = controller;
-    notifyListeners();
   }
 
   set playing(bool playing) {
