@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:music_player/src/widgets/custom_appbar.dart';
 
 class MusicPlayerPage extends StatelessWidget {
@@ -10,8 +13,45 @@ class MusicPlayerPage extends StatelessWidget {
           CustomAppbar(),
 
           ImagenDiscoDuracion(),
+
+          TituloPlay(),
         ],
       )
+    );
+  }
+}
+
+class TituloPlay extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+
+    final screenSize = MediaQuery.of(context).size;
+
+    return Container(
+      padding: EdgeInsets.symmetric( horizontal: screenSize.width * 0.13),
+      margin: EdgeInsets.only(top: 20.0),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Text('Far Away', style: TextStyle( fontSize: 30, color: Colors.white.withOpacity(0.8) ), ),
+              Text('--Breaking Benjamin--', style: TextStyle( fontSize: 15, color: Colors.white.withOpacity(0.5) ), ),
+            ],
+          ),
+          Spacer(),
+
+          FloatingActionButton(
+            backgroundColor: Color(0xFF00FF84).withOpacity(0.6),
+            splashColor: Colors.blueGrey[300],
+            child: FaIcon(FontAwesomeIcons.play, color: Colors.white.withOpacity(0.9),),
+
+            onPressed: (){
+              // TODO: Acciones de reproduccion
+            },
+          ),
+        ],
+      ),
     );
   }
 }
